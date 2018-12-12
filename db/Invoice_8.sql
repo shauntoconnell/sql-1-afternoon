@@ -1,0 +1,1 @@
+SELECT SUM("Total") FROM "Invoice";

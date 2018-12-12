@@ -1,0 +1,1 @@
+SELECT * FROM Person WHERE age < 20 OR age > 27;

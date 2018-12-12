@@ -1,0 +1,1 @@
+SELECT * FROM "Artist" ORDER BY "Name" ASC LIMIT 5;

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM "Employee" WHERE "City" = 'Lethbridge';

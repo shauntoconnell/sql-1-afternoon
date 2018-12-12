@@ -1,0 +1,27 @@
+{
+  "name": "sql-1-afternoon",
+  "version": "1.0.0",
+  "description": "<img src=\"https://s3.amazonaws.com/devmountain/readme-logo.png\" width=\"250\" align=\"right\">",
+  "scripts": {
+    "test": "jest --detectOpenHandles --watch",
+    "test-cover": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clayakn/sql-1-afternoon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Clayakn/sql-1-afternoon/issues"
+  },
+  "homepage": "https://github.com/Clayakn/sql-1-afternoon#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "massive": "^5.7.0"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}

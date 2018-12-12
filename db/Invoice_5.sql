@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM "Invoice" WHERE "Total" < 5;

@@ -1,0 +1,1 @@
+SELECT * FROM "Artist" ORDER BY "Name" Desc LIMIT 10;
