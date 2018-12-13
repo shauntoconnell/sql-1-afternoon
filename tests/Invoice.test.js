@@ -1,5 +1,29 @@
 const testInit = require('./helpers/init');
 
+// Method to check if object is contained within array
+expect.extend({
+    toContainObject(received, argument) {
+  
+      const pass = this.equals(received, 
+        expect.arrayContaining([
+          expect.objectContaining(argument)
+        ])
+      )
+  
+      if (pass) {
+        return {
+          message: () => (`expected ${this.utils.printReceived(received)} not to contain object ${this.utils.printExpected(argument)}`),
+          pass: true
+        }
+      } else {
+        return {
+          message: () => (`expected ${this.utils.printReceived(received)} to contain object ${this.utils.printExpected(argument)}`),
+          pass: false
+        }
+      }
+    }
+  });
+
 describe('Invoice Table Tests', () => {
     let db; 
 
@@ -33,9 +57,9 @@ describe('Invoice Table Tests', () => {
 
     describe('Invoice 4 Test', () => {
         it("should successfully find all orders bigger than $5", async () => {
-            const invoices = await db.Invoice_4();
-                invoices.forEach(invoice => {
-                    expect(parseFloat(invoice.Total, 10)).toBeGreaterThan(5);      
+            const orders = await db.Invoice_4();
+                orders.forEach(order => {
+                    expect(parseFloat(order.Total, 10)).toBeGreaterThan(5);      
                 });
         });
     });
@@ -67,6 +91,26 @@ describe('Invoice Table Tests', () => {
         it("should successfully get the total sum of all orders", async () => {
             const totals = await db.Invoice_8();
             expect(parseFloat(totals[0].sum, 10)).toBe(2328.60);      
+        });
+    });
+
+    describe('Invoice 9 Test', () => {
+        it.only(`should successfully remove all orders that has a "BillingState" of null`, () => {
+            let testPasses = false;
+            return db.withTransaction( async (db) => {
+               await db.Invoice_9();
+               const orders = await db.query('SELECT * FROM "Invoice"');
+               expect(orders).not.toContainObject({BillingState: null});
+               testPasses = true;
+               return Promise.reject(new Error('Intentional rollback for testing'));
+            }).catch(error => {
+                if (testPasses) {
+                    // Do nothing. The promise returned to jest will be marked as solved, meaning
+                    // the test will pass successfully.
+                } else {
+                    throw error
+                }
+            });
         });
     });
 

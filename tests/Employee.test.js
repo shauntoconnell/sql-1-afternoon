@@ -130,4 +130,27 @@ describe('Employee Table Tests', () => {
         });
     });
 
+    describe('Employee 8 Test', () => {
+        it(`should successfully change all employees' "Title" with the title Sales Support Agent to Sales Support Specialist`, () => {
+            let testPasses = false;
+            return db.withTransaction( async (db) => {
+               await db.Employee_8();
+               const employees = await db.query('SELECT * FROM "Employee"');
+               expect(employees).not.toContainObject({Title: 'Sales Support Agent'});
+               expect(employees).toContainObject({FirstName: 'Jane', LastName: 'Peacock', Title: 'Sales Support Specialist'});
+               expect(employees).toContainObject({FirstName: 'Margaret', LastName: 'Park', Title: 'Sales Support Specialist'});
+               expect(employees).toContainObject({FirstName: 'Steve', LastName: 'Johnson', Title: 'Sales Support Specialist'});
+               testPasses = true;
+               return Promise.reject(new Error('Intentional rollback for testing'));
+            }).catch(error => {
+                if (testPasses) {
+                    // Do nothing. The promise returned to jest will be marked as solved, meaning
+                    // the test will pass successfully.
+                } else {
+                    throw error
+                }
+            });
+        });
+    });
+
 });
