@@ -35,12 +35,6 @@ Use [www.sqlteaching.com](http://www.sqlteaching.com/) or [sqlbolt.com](http://s
 13. List all the people in the Person table where their favorite color is Purple, Green or Blue (use IN).
 14. List all the people in the Person table where their city is Irving or LA (use IN).
 15. **Bonus** List all the people in the Person table where their nicknames are cool. 
-    Explanation 
-        WPM: Andrew took a typing test in front of the class and a student made an emoji about it which has Andrew's face with code as his background. 
-        Captain Bad Programmer: One of Sean's classmate created an emoji with Sean's face wearing an eyepatch and called it Captain Bad Programmer. 
-        Saint Austin of DevMountain: Austin's lifestyle reflects his religious beliefs and one of Austin's classmate created an emoji and called it Saint Austin of DevMountain.
-        TripleS: Josh's lifestyle can be summarized with three words: Stargazing, Sockets, & Subway. 
-        EDM Hunter: Hunter's lifestyle can be explained with a tie dye t-shirt he wore which has Bob Ross' face on it and the phrase Positive Vibes. One of his mentors created an emjoji with Hunter's face wearing sunglasses and called it EDM Hunter.
     
 
 ### Solution
@@ -322,7 +316,7 @@ SELECT SUM(productprice * quantity) FROM Orders WHERE personid = 1;
 
 ### Instructions
 
-1. Add 3 new artists to the Artist table with their "ArtistId" being 276, 277, 278. The "ArtistId" column accepts integers. ( It's already created )
+1. Add 3 new artists to the Artist table ( It's already created ) with their "ArtistId" being 276, 277, 278. The "ArtistId" column accepts integers. 
 2. Select 10 artists in reverse alphabetical order.
 3. Select 5 artists in alphabetical order.
 4. Select all artists where their "Name" starts with the word "Black".
@@ -398,9 +392,11 @@ SELECT * FROM "Artist" WHERE "Name" LIKE '%Black%';
 1. List all Employee first and last names only that live in Calgary.
 2. Find the first and last name and birthdate for the youngest employee.
 3. Find the first and last name and birthdate for the oldest employee.
-4. Find everyone that reports to Nancy Edwards (Use the ReportsTo column).
+4. Find everyone that reports to Nancy Edwards (Use the "ReportsTo" column).
    * You will need to query the employee table to find the "EmployeeId" for Nancy Edwards
 5. Count how many people live in Lethbridge.
+6. Remove the general manager, Andrew Adams, from the Employee Table.
+7. Change Nancy Edwards' "Title" to General Manager and "ReportsTo" to null. 
 
 ### Solution
 
@@ -454,6 +450,26 @@ SELECT * FROM "Employee" WHERE "ReportsTo" = (SELECT "EmployeeId" FROM "Employee
 
 ```sql
 SELECT COUNT(*) FROM "Employee" WHERE "City" = 'Lethbridge';
+```
+
+</details>
+
+<details>
+
+<summary> <code> #6 </code> </summary>
+
+```sql
+DELETE FROM "Employee" WHERE "FirstName" = 'Andrew' AND "LastName" = 'Adams';
+```
+
+</details>
+
+<details>
+
+<summary> <code> #7 </code> </summary>
+
+```sql
+UPDATE "Employee" SET "Title" = 'General Manager', "ReportsTo" = null WHERE "FirstName" = 'Nancy' AND "LastName" = 'Edwards';
 ```
 
 </details>

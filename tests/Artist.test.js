@@ -1,5 +1,29 @@
 const testInit = require('./helpers/init');
 
+// Method to check if object is contained within array
+expect.extend({
+    toContainObject(received, argument) {
+  
+      const pass = this.equals(received, 
+        expect.arrayContaining([
+          expect.objectContaining(argument)
+        ])
+      )
+  
+      if (pass) {
+        return {
+          message: () => (`expected ${this.utils.printReceived(received)} not to contain object ${this.utils.printExpected(argument)}`),
+          pass: true
+        }
+      } else {
+        return {
+          message: () => (`expected ${this.utils.printReceived(received)} to contain object ${this.utils.printExpected(argument)}`),
+          pass: false
+        }
+      }
+    }
+  });
+
 describe('Artist Table Tests', () => {
     let db; 
 
@@ -12,18 +36,27 @@ describe('Artist Table Tests', () => {
 
     describe('Artist 1 Test', () => {
         it('should successfully add 3 artists', () => {
+            let testPasses = false;
             db.withTransaction( async (db) => {
                await db.Artist_1();
-               const artists = await db.query('SELECT * FROM "Artist" WHERE "ArtistId" in (276, 277, 278').then(artists => artists);
+               const artists = await db.query('SELECT * FROM "Artist" WHERE "ArtistId" in (276, 277, 278');
                expect(artists.length).toBe(3);
-               return Promise.reject();
+               testPasses = true;
+               return Promise.reject(new Error('Intentional rollback for testing'));
+            }).catch(error => {
+                if (testPasses) {
+                    // Do nothing. The promise returned to jest will be marked as solved, meaning
+                    // the test will pass successfully.
+                } else {
+                    throw error
+                }
             });
         });
     });
 
     describe('Artist 2 Test', () => {
         it('should successfully select 10 artists in reverse alphabetical order', async () => {
-            const artists = await db.Artist_2().then(artists => artists);
+            const artists = await db.Artist_2();
              expect(artists.length).toBe(10);
              expect(artists[0].Name).toBe('Zeca Pagodinho');
              expect(artists[7].Name).toBe('Vinicius, Toquinho & Quarteto Em Cy');
@@ -32,7 +65,7 @@ describe('Artist Table Tests', () => {
 
     describe('Artist 3 Test', () => {
         it('should successfully select 10 artists in reverse alphabetical order', async () => {
-            const artists = await db.Artist_3().then(artists => artists);
+            const artists = await db.Artist_3();
              expect(artists.length).toBe(5);
              expect(artists[0].Name).toBe('Aaron Copland & London Symphony Orchestra');
              expect(artists[4].Name).toBe('Academy of St. Martin in the Fields & Sir Neville Marriner');
@@ -41,9 +74,11 @@ describe('Artist Table Tests', () => {
 
    describe('Artist 4 Test', () => {
         it('should successfully select artists where their "Name" starts with the word Black', async () => {
-            const artists = await db.Artist_4().then(artists => artists);
+            const artists = await db.Artist_4();
              expect(artists.length).toBe(3);
-             expect(artists.find(artist => artist.Name === 'Black Sabbath')).toBeTruthy();
+             expect(artists).toContainObject({Name: 'Black Label Society'});
+             expect(artists).toContainObject({Name: 'Black Sabbath'});
+             expect(artists).toContainObject({Name: 'Black Eyed Peas'});
         });
     });
 
@@ -51,7 +86,11 @@ describe('Artist Table Tests', () => {
         it('should successfully select artists where their "Name" contains the word Black', () => {
              db.Artist_5().then(artists => {
                  expect(artists.length).toBe(5);
-                 expect(artists.find(artist => artist.Name === 'The Black Crowes')).toBeTruthy();
+                 expect(artists).toContainObject({Name: 'Black Label Society'});
+                 expect(artists).toContainObject({Name: 'Black Sabbath'});
+                 expect(artists).toContainObject({Name: 'Banda Black Rio'});
+                 expect(artists).toContainObject({Name: 'The Black Crowes'});
+                 expect(artists).toContainObject({Name: 'Black Eyed Peas'});
              });
         });
     });
