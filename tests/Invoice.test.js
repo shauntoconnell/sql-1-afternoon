@@ -1,6 +1,24 @@
 const testInit = require('./helpers/init');
 
-// Method to check if object is contained within array
+
+// Reusable function for transaction
+function dbTransaction(db, doExpects) {
+    let testPasses = false;
+    db.withTransaction(async () => {
+        await doExpects();
+        testPasses = true;
+        return Promise.reject(new Error('Intentional rollback for testing'));
+    }).catch(error => {
+        if (testPasses) {
+            // Do nothing. The promise returned to jest will be marked as solved, meaning
+            // the test will pass successfully.
+        } else {
+            throw error
+        }
+    });
+};
+
+// Method to check if object is contained within array (toContainObject)
 expect.extend({
     toContainObject(received, argument) {
   
@@ -95,21 +113,11 @@ describe('Invoice Table Tests', () => {
     });
 
     describe('Invoice 9 Test', () => {
-        it.only(`should successfully remove all orders that has a "BillingState" of null`, () => {
-            let testPasses = false;
-            return db.withTransaction( async (db) => {
+        it(`should successfully remove all orders that has a "BillingState" of null`, () => {
+            return dbTransaction( db, async () => {
                await db.Invoice_9();
                const orders = await db.query('SELECT * FROM "Invoice"');
                expect(orders).not.toContainObject({BillingState: null});
-               testPasses = true;
-               return Promise.reject(new Error('Intentional rollback for testing'));
-            }).catch(error => {
-                if (testPasses) {
-                    // Do nothing. The promise returned to jest will be marked as solved, meaning
-                    // the test will pass successfully.
-                } else {
-                    throw error
-                }
             });
         });
     });

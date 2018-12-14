@@ -1,5 +1,22 @@
 const testInit = require('./helpers/init');
 
+// Reusable function for transaction
+function dbTransaction(db, doExpects) {
+    let testPasses = false;
+    db.withTransaction(async () => {
+        await doExpects();
+        testPasses = true;
+        return Promise.reject(new Error('Intentional rollback for testing'));
+    }).catch(error => {
+        if (testPasses) {
+            // Do nothing. The promise returned to jest will be marked as solved, meaning
+            // the test will pass successfully.
+        } else {
+            throw error
+        }
+    });
+}
+
 // Method to check if object is contained within array
 expect.extend({
     toContainObject(received, argument) {
@@ -23,15 +40,6 @@ expect.extend({
       }
     }
   });
-
-    // Reusable funciton for transaction
-    // function doTestAndWrapInTransaction(db, cb) {
-    //     return db.withTransaction(async () => {
-    //         return cb()
-    //     }).catch(error => {
-
-    //     })
-    // }
 
 describe('Employee Table Tests', () => {
     let db; 
@@ -90,67 +98,42 @@ describe('Employee Table Tests', () => {
 
     describe('Employee 6 Test', () => {
         it('should successfully delete Andrew Adams from the Employee table', () => {
-            let testPasses = false;
-            return db.withTransaction( async (db) => {
+
+            //reference dbTransaction on line 3
+            return dbTransaction(db,  async () => {
                await db.Employee_6();
                const employees = await db.query('SELECT * FROM "Employee"');
-               // Expect first employee in the array not to be Andrew Adams
                expect(employees).not.toContainObject({FirstName: 'Andrew', LastName: 'Adams'});
-               testPasses = true;
-               return Promise.reject(new Error('Intentional rollback for testing'));
-            }).catch(error => {
-                if (testPasses) {
-                    // Do nothing. The promise returned to jest will be marked as solved, meaning
-                    // the test will pass successfully.
-                } else {
-                    throw error
-                }
             });
         });
     });
 
     describe('Employee 7 Test', () => {
-        it('should successfully update Nancy Edwards Title" to General Manager and "ReportsTo" to null', () => {
-            let testPasses = false;
-            return db.withTransaction( async (db) => {
-               await db.Employee_7();
-               const employees = await db.query(`SELECT * FROM "Employee" WHERE "FirstName" = 'Nancy' AND "LastName" = 'Edwards'`);
-               expect(employees[0].Title).toBe('General Manager');
-               expect(employees[0].ReportsTo).toBeNull();
-               testPasses = true;
-               return Promise.reject(new Error('Intentional rollback for testing'));
-            }).catch(error => {
-                if (testPasses) {
-                    // Do nothing. The promise returned to jest will be marked as solved, meaning
-                    // the test will pass successfully.
-                } else {
-                    throw error
-                }
+        it('should successfully update Nancy Edwards "Title" to General Manager and "ReportsTo" to null', () => {
+
+            //reference dbTransaction on line 3
+            return dbTransaction(db, async () => {
+                await db.Employee_7();
+                const employees = await db.query(`SELECT * FROM "Employee" WHERE "FirstName" = 'Nancy' AND "LastName" = 'Edwards'`);
+                expect(employees[0].Title).toBe('General Manager');
+                expect(employees[0].ReportsTo).toBeNull();
             });
         });
     });
 
     describe('Employee 8 Test', () => {
         it(`should successfully change all employees' "Title" with the title Sales Support Agent to Sales Support Specialist`, () => {
-            let testPasses = false;
-            return db.withTransaction( async (db) => {
-               await db.Employee_8();
-               const employees = await db.query('SELECT * FROM "Employee"');
+
+            //reference dbTransaction on line 3
+            return dbTransaction(db, async () => {
+                await db.Employee_8();
+               const employees = await db.query(`SELECT * FROM "Employee"`);
                expect(employees).not.toContainObject({Title: 'Sales Support Agent'});
                expect(employees).toContainObject({FirstName: 'Jane', LastName: 'Peacock', Title: 'Sales Support Specialist'});
                expect(employees).toContainObject({FirstName: 'Margaret', LastName: 'Park', Title: 'Sales Support Specialist'});
                expect(employees).toContainObject({FirstName: 'Steve', LastName: 'Johnson', Title: 'Sales Support Specialist'});
-               testPasses = true;
-               return Promise.reject(new Error('Intentional rollback for testing'));
-            }).catch(error => {
-                if (testPasses) {
-                    // Do nothing. The promise returned to jest will be marked as solved, meaning
-                    // the test will pass successfully.
-                } else {
-                    throw error
-                }
             });
         });
     });
-
 });
+
