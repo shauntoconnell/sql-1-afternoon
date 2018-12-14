@@ -26,31 +26,31 @@ describe('Orders Table Tests', () => {
                 productname: 'dog bone',
                 productprice: 10.24,
                 quantity: 1,
-            }
+            };
             await db.query('DELETE FROM orders');
             await db.query("INSERT INTO orders (personid, productname, productprice, quantity) VALUES (1, 'dog bone', 10.24, 1)");
             const orders = await db.query('SELECT * FROM orders WHERE id = 1');
             expect(orders[0]).toEqual(order);
             // Cleaning up order created
             await db.query('DELETE FROM orders');
-            });
+        });
     });
 
     describe('Orders 2 Test', () => {
         it('should successfully add 5 orders', async () => {  
-           await db.query('DELETE FROM orders')
-           await db.orders_2()
+           await db.query('DELETE FROM orders');
+           await db.orders_2();
            const counts = await db.query('SELECT COUNT(*) FROM orders');
-           expect(parseInt(counts[0].count, 10)).toBe(5)
+           expect(parseInt(counts[0].count, 10)).toBe(5);
         });
     });
 
     describe('Orders 3 Test', () => {
         it('should successfully select all orders', async () => {
-            await db.orders_3()
+            await db.orders_3();
             const counts = await db.query('SELECT COUNT(*) FROM orders');
-                expect(parseInt(counts[0].count, 10)).toBe(5)
-            });
+                expect(parseInt(counts[0].count, 10)).toBe(5);
+        });
     });
 
     describe('Orders 4 Test', () => {
@@ -63,14 +63,14 @@ describe('Orders Table Tests', () => {
     describe('Orders 5 Test', () => {
         it('should successfully find the total price of all orders', async () => {
             const sums = await db.orders_5();
-                expect(parseFloat(sums[0].sum, 10)).toBe(160.05);
+            expect(parseFloat(sums[0].sum, 10)).toBe(160.05);
         });
     });
 
     describe('Orders 6 Test', () => {
         it('should successfully find the total price of all orders from the person with an id of 1', async () => {
             const sums = await db.orders_6();
-                expect(parseFloat(sums[0].sum, 10)).toBe(79.5);
+            expect(parseFloat(sums[0].sum, 10)).toBe(79.5);
         });
     });
 });

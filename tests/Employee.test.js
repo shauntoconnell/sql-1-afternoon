@@ -100,9 +100,9 @@ describe('Employee Table Tests', () => {
         it('should successfully delete Andrew Adams from the Employee table', () => {
 
             //reference dbTransaction on line 3
-            return dbTransaction(db, async () => {
-                await db.Employee_6();
-                const employees = await db.query('SELECT * FROM "Employee"');
+            return dbTransaction(db, async (tx) => {
+                await tx.Employee_6();
+                const employees = await tx.query('SELECT * FROM "Employee"');
                 expect(employees).not.toContainObject({ FirstName: 'Andrew', LastName: 'Adams' });
             });
         });
@@ -112,9 +112,9 @@ describe('Employee Table Tests', () => {
         it('should successfully update Nancy Edwards "Title" to General Manager and "ReportsTo" to null', () => {
 
             //reference dbTransaction on line 3
-            return dbTransaction(db, async () => {
-                await db.Employee_7();
-                const employees = await db.query(`SELECT * FROM "Employee" WHERE "FirstName" = 'Nancy' AND "LastName" = 'Edwards'`);
+            return dbTransaction(db, async (tx) => {
+                await tx.Employee_7();
+                const employees = await tx.query(`SELECT * FROM "Employee" WHERE "FirstName" = 'Nancy' AND "LastName" = 'Edwards'`);
                 expect(employees[0].Title).toBe('General Manager');
                 expect(employees[0].ReportsTo).toBeNull();
             });

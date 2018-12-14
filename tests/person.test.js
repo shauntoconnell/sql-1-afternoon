@@ -37,9 +37,9 @@ describe('Person Table Tests', () => {
 
     describe('Person 1 Test', () => {
         it('should successfully create a table PERSON', async () => {
-          await db.query('DROP TABLE IF EXISTS PERSON');
-          await db.person_1();
-          const persons = await db.query("SELECT * FROM pg_catalog.pg_tables WHERE tablename = 'person'");
+            await db.query('DROP TABLE IF EXISTS PERSON');
+            await db.person_1();
+            const persons = await db.query("SELECT * FROM pg_catalog.pg_tables WHERE tablename = 'person'");
             expect(persons[0].tablename).toBe('person');
         });
     
@@ -52,7 +52,7 @@ describe('Person Table Tests', () => {
                 height: 175, 
                 city: "Irving",
                 favoritecolor: "Aquamarine"
-            }
+            };
             await db.query("INSERT INTO person (name, nickname, age, height, city, favoritecolor) VALUES ('Andrew', 'WPM', 25, 175, 'Irving', 'Aquamarine')");
             const persons = await db.query('SELECT * FROM person WHERE id = 1');
                 expect(persons[0]).toEqual(person);
@@ -65,18 +65,18 @@ describe('Person Table Tests', () => {
         it('should successfully add 5 people', async () => {
             await db.person_2();
             const numbers = await db.query('SELECT COUNT(*) FROM person');
-                expect(parseInt(numbers[0].count, 10)).toBe(5);
+            expect(parseInt(numbers[0].count, 10)).toBe(5);
         });
     });
 
     describe('Person 3 Test', () => {
         it('should successfully order people from tallest to shortest', async () => {
             const persons = await db.person_3();
-                expect(persons[0].name).toBe('Hunter');
-                expect(persons[1].name).toBe('Sean');
-                expect(persons[2].name).toBe('Josh');
-                expect(persons[3].name).toBe('Andrew');
-                expect(persons[4].name).toBe('Austin');
+            expect(persons[0].name).toBe('Hunter');
+            expect(persons[1].name).toBe('Sean');
+            expect(persons[2].name).toBe('Josh');
+            expect(persons[3].name).toBe('Andrew');
+            expect(persons[4].name).toBe('Austin');
         });
     });
 
@@ -84,11 +84,11 @@ describe('Person Table Tests', () => {
     describe('Person 4 Test', () => {
         it('should successfully order people from shortest to tallest', async () => {
             const persons = await db.person_4();
-                expect(persons[0].name).toBe('Austin');
-                expect(persons[1].name).toBe('Andrew');
-                expect(persons[2].name).toBe('Josh');
-                expect(persons[3].name).toBe('Sean');
-                expect(persons[4].name).toBe('Hunter');
+            expect(persons[0].name).toBe('Austin');
+            expect(persons[1].name).toBe('Andrew');
+            expect(persons[2].name).toBe('Josh');
+            expect(persons[3].name).toBe('Sean');
+            expect(persons[4].name).toBe('Hunter');
         });
     });
 
@@ -96,11 +96,11 @@ describe('Person Table Tests', () => {
     describe('Person 5 Test', () => {
         it('should successfully order people from oldest to youngest', async () => {
             const persons = await db.person_5();
-                  expect(persons[0].name).toBe('Josh');
-                  expect(persons[1].name).toBe('Andrew');
-                  expect(persons[2].name).toBe('Sean');
-                  expect(persons[3].name).toBe('Austin');
-                  expect(persons[4].name).toBe('Hunter');
+            expect(persons[0].name).toBe('Josh');
+            expect(persons[1].name).toBe('Andrew');
+            expect(persons[2].name).toBe('Sean');
+            expect(persons[3].name).toBe('Austin');
+            expect(persons[4].name).toBe('Hunter');
         });
     });
 

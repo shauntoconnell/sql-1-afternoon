@@ -1,11 +1,10 @@
 const testInit = require('./helpers/init');
 
-
 // Reusable function for transaction
 function dbTransaction(db, doExpects) {
     let testPasses = false;
-    db.withTransaction(async () => {
-        await doExpects();
+    return db.withTransaction(async (tx) => {
+        await doExpects(tx);
         testPasses = true;
         return Promise.reject(new Error('Intentional rollback for testing'));
     }).catch(error => {
@@ -40,7 +39,7 @@ expect.extend({
         }
       }
     }
-  });
+});
 
 describe('Invoice Table Tests', () => {
     let db; 
@@ -55,44 +54,44 @@ describe('Invoice Table Tests', () => {
     describe('Invoice 1 Test', () => {
         it("should successfully count how many orders came from the USA", async () => {
             const counts = await db.Invoice_1();
-                expect(parseInt(counts[0].count, 10)).toBe(91);      
+            expect(parseInt(counts[0].count, 10)).toBe(91);      
         });
     });
 
     describe('Invoice 2 Test', () => {
         it("should successfully find the largest order total amount", async () => {
             const totals = await db.Invoice_2();
-                expect(parseFloat(totals[0].max, 10)).toBe(25.86);      
+            expect(parseFloat(totals[0].max, 10)).toBe(25.86);      
         });
     });
 
     describe('Invoice 3 Test', () => {
         it("should successfully find the smallest order total amount", async () => {
             const totals = await db.Invoice_3();
-                expect(parseFloat(totals[0].min, 10)).toBe(.99);      
+            expect(parseFloat(totals[0].min, 10)).toBe(.99);      
         });
     });
 
     describe('Invoice 4 Test', () => {
         it("should successfully find all orders bigger than $5", async () => {
             const orders = await db.Invoice_4();
-                orders.forEach(order => {
-                    expect(parseFloat(order.Total, 10)).toBeGreaterThan(5);      
-                });
+            orders.forEach(order => {
+                expect(parseFloat(order.Total, 10)).toBeGreaterThan(5);      
+            });
         });
     });
 
     describe('Invoice 5 Test', () => {
         it("should successfully count how many orders were in CA, TX, or AZ", async () => {
             const counts = await db.Invoice_5();
-                expect(parseInt(counts[0].count, 10)).toBe(233);      
+            expect(parseInt(counts[0].count, 10)).toBe(233);      
         });
     });
 
     describe('Invoice 6 Test', () => {
         it("should successfully count how many orders were in CA, TX, or AZ", async () => {
             const counts = await db.Invoice_6();
-                expect(parseInt(counts[0].count, 10)).toBe(35);      
+            expect(parseInt(counts[0].count, 10)).toBe(35);      
         });
     });
 
@@ -114,9 +113,10 @@ describe('Invoice Table Tests', () => {
 
     describe('Invoice 9 Test', () => {
         it(`should successfully remove all orders that has a "BillingState" of null`, () => {
-            return dbTransaction( db, async () => {
-               await db.Invoice_9();
-               const orders = await db.query('SELECT * FROM "Invoice"');
+            //reference dbTransaction on line 3
+            return dbTransaction( db, async (tx) => {
+               await tx.Invoice_9();
+               const orders = await tx.query('SELECT * FROM "Invoice"');
                expect(orders).not.toContainObject({BillingState: null});
             });
         });
