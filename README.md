@@ -2,13 +2,22 @@
 
 # Project Summary
 
-In this project we will be practicing inserting and querying data using SQL. We'll make use of a handy online tool called Chinook that we'll use to write SQL online. <a href="http://jxs.me/chinook-web/">Click me</a>
+In this project we will be practicing inserting and querying data using SQL. All of your SQL commands will be written in the files already created in the db folder. The sql file names correspond with the problem numbers. For example Artist_1.sql corresponds with Arist Table Problem #1. 
 
-On the left are the Tables with their fields, the right is where we will be writing our queries, and the bottom is where we will see our results.  
-
-Any new tables or records that we add into the database will be removed after you refresh the page.
+For Tables People and Orders, you will be creating the tables for those. For the Artist, Employee, & Invoice Tables, they will be created when you run the chinook.sql file. The instructions for the chinook.sql file are down below when you start on the Artist Table. 
 
 Use [www.sqlteaching.com](http://www.sqlteaching.com/) or [sqlbolt.com](http://sqlbolt.com/) as resources for the missing keywords you'll need.
+
+## Setup
+
+* Setup a [Heroku](https://heroku.com) account and database using this link. <a href="https://github.com/Peridigital/sql-setup">Click me.</a>
+* `Fork` this repository.
+* `Clone` your fork.
+* Run `npm install` or `yarn` in your local repository.
+* Make a `.env` file at the root of the project. Copy the `.env.example.env` file into the `.env` file. (The `.env` file & `node_modules` folder should already be ignored in the `.gitignore` file)
+* Copy the connection URI for your database in Heroku and save it in your `.env` file (make sure you put `?ssl=true` on the end of the string).
+* When you are verifying that your sql commands are correct, run `npm test [file name]` or `yarn test [file name]` for the tests to run. 
+
 
 ## Table - People
 
@@ -306,7 +315,7 @@ SELECT SUM(productprice * quantity) FROM Orders WHERE personid = 1;
 </details>
 
 </details>
-
+<br/>
 **For the next three tables (Artist, Employee, & Invoice), you will be using the Chinook database provided. Copy the chinook.sql file and run it into your database. You will only need to run this file once entirely.**
 
 **Make sure to use double quotes for all table names and column names. Double quotes are what allows capital letters to use inserted/used in postgreSQL. All table names and column names start with a capital letter and is using camelCase.** 
