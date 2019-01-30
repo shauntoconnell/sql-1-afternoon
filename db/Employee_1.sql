@@ -1,1 +1,2 @@
-SELECT "FirstName", "LastName" FROM "Employee" WHERE "City" = 'Calgary';
+SELECT first_name, last_name FROM employee
+WHERE city = 'Calgary';

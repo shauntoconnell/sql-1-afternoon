@@ -1,1 +1,2 @@
-SELECT * FROM Person WHERE LOWER(favoritecolor) != LOWER('orange') AND LOWER(favoritecolor) != LOWER('blue');
+SELECT * FROM Person
+WHERE FavoriteColor != 'Orange' AND FavoriteColor != 'Blue'

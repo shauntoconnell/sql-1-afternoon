@@ -1,1 +1,2 @@
-SELECT COUNT(*) FROM "Invoice" WHERE "Total" < 5;
+SELECT COUNT(*) FROM invoice
+WHERE total < 5;

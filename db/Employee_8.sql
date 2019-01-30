@@ -1,1 +1,3 @@
-UPDATE "Employee" SET "Title" = 'Sales Support Specialist' WHERE "Title" = 'Sales Support Agent';
+UPDATE employee
+SET title = 'Sales Support Specialist'
+WHERE title = 'Sales Support Agent';

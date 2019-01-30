@@ -1,1 +1,2 @@
-DELETE FROM "Invoice" WHERE "BillingState" IS NULL;
+DELETE FROM invoice
+WHERE billing_state = null;

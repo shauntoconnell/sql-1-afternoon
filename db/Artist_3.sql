@@ -1,1 +1,3 @@
-SELECT * FROM "Artist" ORDER BY "Name" ASC LIMIT 5;
+SELECT * FROM Artist
+ORDER BY Name ASC
+LIMIT 5;

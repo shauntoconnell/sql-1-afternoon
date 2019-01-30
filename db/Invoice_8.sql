@@ -1,1 +1,1 @@
-SELECT SUM("Total") FROM "Invoice";
+SELECT SUM(total) FROM invoice;

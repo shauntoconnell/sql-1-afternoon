@@ -1,1 +1,6 @@
-SELECT "FirstName", "LastName", "BirthDate" FROM "Employee" WHERE "BirthDate" = (SELECT min("BirthDate") FROM "Employee");
+-- SELECT first_name, last_name, birth_date FROM employee
+-- ORDER BY birth_date ASC
+-- LIMIT 1;
+
+SELECT first_name, last_name, birth_date FROM employee
+WHERE birth_date = (SELECT MIN(birth_date) FROM employee)

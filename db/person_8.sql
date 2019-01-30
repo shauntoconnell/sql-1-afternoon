@@ -1,1 +1,2 @@
-SELECT * FROM Person WHERE age < 20 OR age > 27;
+SELECT * FROM Person
+WHERE Age < 20 OR Age > 27;

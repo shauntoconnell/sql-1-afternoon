@@ -1,1 +1,1 @@
-SELECT Min("Total") FROM "Invoice";
+SELECT MIN(total) FROM invoice;
